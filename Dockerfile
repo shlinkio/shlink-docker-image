@@ -56,5 +56,6 @@ RUN php -r "readfile('https://getcomposer.org/installer');" | php && \
     --prefer-dist \
     --no-dev \
     --no-interaction && \
-    php composer.phar dump-autoload --optimize --apcu --classmap-authoritative --no-dev && \
-    rm composer.phar
+    cd shlink && \
+    php ../composer.phar dump-autoload --optimize --apcu --classmap-authoritative --no-dev && \
+    rm ../composer.phar
