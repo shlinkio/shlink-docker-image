@@ -1,7 +1,7 @@
 FROM php:7.1-fpm-alpine
 MAINTAINER Alejandro Celaya <alejandro@alejandrocelaya.com>
 
-ENV SHLINK_VERSION=1.6.1
+ENV SHLINK_VERSION=1.6.2
 
 RUN apk update && \
 
