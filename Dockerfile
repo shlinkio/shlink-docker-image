@@ -24,9 +24,6 @@ RUN apk update && \
     apk add --no-cache --virtual zlib-dev && \
     docker-php-ext-install zip && \
 
-    apk add --no-cache --virtual libmcrypt-dev && \
-    docker-php-ext-install mcrypt && \
-
     apk add --no-cache --virtual libpng-dev && \
     docker-php-ext-install gd
 
