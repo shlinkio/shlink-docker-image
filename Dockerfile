@@ -1,7 +1,8 @@
-FROM php:7.1-fpm-alpine
+FROM php:7.2.7-cli-alpine3.7
 MAINTAINER Alejandro Celaya <alejandro@alejandrocelaya.com>
 
-ENV SHLINK_VERSION=1.6.2
+ENV SHLINK_VERSION=dev-feature/swoole
+ENV EXPRESSIVE_SWOOLE_VERSION=dev-master
 
 RUN apk update && \
 
@@ -49,6 +50,10 @@ RUN mkdir -p /usr/src/php/ext/apcu-bc && \
 RUN rm /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
     echo extension=apcu.so > /usr/local/etc/php/conf.d/20-php-ext-apcu.ini
 
+# Install swoole
+RUN pecl install swoole-2.1.1 && \
+    docker-php-ext-enable swoole
+
 # Install shlink
 RUN php -r "readfile('https://getcomposer.org/installer');" | php && \
     chmod +x composer.phar && \
@@ -57,5 +62,11 @@ RUN php -r "readfile('https://getcomposer.org/installer');" | php && \
     --no-dev \
     --no-interaction && \
     cd shlink && \
+    php ../composer.phar require zendframework/zend-expressive-swoole:$EXPRESSIVE_SWOOLE_VERSION && \
     php ../composer.phar dump-autoload --optimize --apcu --classmap-authoritative --no-dev && \
     rm ../composer.phar
+
+# Expose swoole port
+EXPOSE 8080
+
+ENTRYPOINT php shlink/public/index.php
