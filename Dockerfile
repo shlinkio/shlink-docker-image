@@ -80,4 +80,7 @@ RUN cd shlink && \
 # Expose swoole port
 EXPOSE 8080
 
+# Add swoole config to the project
+ADD config/swoole.global.php shlink/config/autoload/swoole.global.php
+
 ENTRYPOINT php shlink/public/index.php
