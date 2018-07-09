@@ -1,7 +1,7 @@
 FROM php:7.2.7-cli-alpine3.7
 MAINTAINER Alejandro Celaya <alejandro@alejandrocelaya.com>
 
-ENV SHLINK_VERSION=dev-feature/swoole
+ENV SHLINK_VERSION=1.10.0
 ENV EXPRESSIVE_SWOOLE_VERSION=dev-master
 
 WORKDIR /var/html
