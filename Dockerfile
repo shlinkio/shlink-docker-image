@@ -1,8 +1,8 @@
 FROM php:7.2.7-cli-alpine3.7
 MAINTAINER Alejandro Celaya <alejandro@alejandrocelaya.com>
 
-ENV SHLINK_VERSION=1.10.0
-ENV EXPRESSIVE_SWOOLE_VERSION=dev-master
+ENV SHLINK_VERSION=1.10.1
+ENV EXPRESSIVE_SWOOLE_VERSION=0.1.0
 
 WORKDIR /var/html
 
@@ -65,17 +65,10 @@ RUN php -r "readfile('https://getcomposer.org/installer');" | php && \
 
 # Install swoole expressive integration and dump autoloader
 RUN cd shlink && \
-    php ../composer.phar config repositories.zend-expressive-swoole vcs https://github.com/zendframework/zend-expressive-swoole.git && \
-    php ../composer.phar config minimum-stability dev && \
     php ../composer.phar require zendframework/zend-expressive-swoole:$EXPRESSIVE_SWOOLE_VERSION --prefer-dist --update-no-dev && \
+    sed -i "s/%SHLINK_VERSION%/${SHLINK_VERSION}/g" config/autoload/app_options.global.php && \
     php ../composer.phar dump-autoload --optimize --apcu --classmap-authoritative --no-dev && \
     rm ../composer.phar
-
-# TODO When zend-expressive-swoole package is stable and published, replace previous block with this one
-#RUN cd shlink && \
-#    php ../composer.phar require zendframework/zend-expressive-swoole:$EXPRESSIVE_SWOOLE_VERSION --prefer-dist --update-no-dev && \
-#    php ../composer.phar dump-autoload --optimize --apcu --classmap-authoritative --no-dev && \
-#    rm ../composer.phar
 
 # Expose swoole port
 EXPOSE 8080
