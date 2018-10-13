@@ -67,10 +67,17 @@ RUN php -r "readfile('https://getcomposer.org/installer');" | php && \
     rm ../composer.phar && \
     rm -rf ~/.composer
 
+# Add shlink to the path to ease running it after container is created
+RUN ln -s /var/html/shlink/bin/cli /usr/local/bin/shlink
+
 # Add swoole config to the project
 ADD config/swoole.global.php shlink/config/autoload/swoole.global.php
 
 # Expose swoole port
 EXPOSE 8080
 
-ENTRYPOINT php shlink/public/index.php start
+# Expose params config dir, since the user is expected to provide custom config from there
+VOLUME shlink/config/params
+
+ADD docker-entrypoint.sh docker-entrypoint.sh
+ENTRYPOINT ["/bin/sh", "./docker-entrypoint.sh"]
