@@ -73,4 +73,4 @@ ADD config/swoole.global.php shlink/config/autoload/swoole.global.php
 # Expose swoole port
 EXPOSE 8080
 
-ENTRYPOINT php shlink/public/index.php
+ENTRYPOINT php shlink/public/index.php start
