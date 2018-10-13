@@ -1,8 +1,8 @@
 FROM php:7.2.7-cli-alpine3.7
 MAINTAINER Alejandro Celaya <alejandro@alejandrocelaya.com>
 
-ENV SHLINK_VERSION=1.10.1
-ENV EXPRESSIVE_SWOOLE_VERSION=0.1.0
+ENV SHLINK_VERSION=1.13.0
+ENV EXPRESSIVE_SWOOLE_VERSION=^1.0
 
 WORKDIR /var/html
 
@@ -19,7 +19,7 @@ RUN apk update && \
     apk add --no-cache --virtual sqlite-dev && \
     docker-php-ext-install pdo_sqlite && \
 
-    # Install other PHP packages that depend on pther system packages
+    # Install other PHP packages that depend on other system packages
     apk add --no-cache --virtual icu-dev && \
     docker-php-ext-install intl && \
 
