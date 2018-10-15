@@ -71,7 +71,7 @@ RUN php -r "readfile('https://getcomposer.org/installer');" | php && \
 RUN ln -s /var/html/shlink/bin/cli /usr/local/bin/shlink
 
 # Add swoole config to the project
-ADD config/swoole.global.php shlink/config/autoload/swoole.global.php
+ADD config/shlink_in_docker.global.php shlink/config/autoload/shlink_in_docker.global.php
 
 # Expose swoole port
 EXPOSE 8080

@@ -1,9 +1,14 @@
 <?php
 declare(strict_types=1);
 
+namespace Shlinkio\Shlink;
+
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\PsrLogMessageProcessor;
+
+use function str_shuffle;
+use function substr;
 
 return [
 
@@ -46,6 +51,27 @@ return [
             // instead
             'Logger_Shlink' => 'Logger_ShlinkWithSwoole'
         ],
+    ],
+
+    'app_options' => [
+        'secret_key' => substr(str_shuffle('123456789bcdfghjkmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ'), 0, 32),
+        'disable_track_param' => null,
+    ],
+
+    'entity_manager' => [
+        'connection' => [
+            'driver' => 'pdo_sqlite',
+            'path' => 'data/database.sqlite',
+            'dbname' => 'shlink',
+            'driverOptions' => [
+                1002 => 'SET NAMES utf8',
+            ],
+        ],
+    ],
+
+    'url_shortener' => [
+        'shortcode_chars' => str_shuffle('123456789bcdfghjkmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ'),
+        'validate_url' => true,
     ],
 
 ];
