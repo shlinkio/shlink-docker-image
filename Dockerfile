@@ -1,10 +1,9 @@
 FROM php:7.2.7-cli-alpine3.7
 MAINTAINER Alejandro Celaya <alejandro@alejandrocelaya.com>
 
-ENV SHLINK_VERSION=1.13.0
-ENV EXPRESSIVE_SWOOLE_VERSION=^1.0
+ENV SHLINK_VERSION=1.15.0
 
-WORKDIR /var/html
+WORKDIR /etc/shlink
 
 RUN apk update && \
 
@@ -15,18 +14,18 @@ RUN apk update && \
     docker-php-ext-install calendar && \
 
     # Install sqlite
-    apk add --no-cache sqlite-libs && \
-    apk add --no-cache sqlite-dev && \
+    apk add --no-cache --virtual sqlite-libs && \
+    apk add --no-cache --virtual sqlite-dev && \
     docker-php-ext-install pdo_sqlite && \
 
     # Install other PHP packages that depend on other system packages
-    apk add --no-cache icu-dev && \
+    apk add --no-cache --virtual icu-dev && \
     docker-php-ext-install intl && \
 
-    apk add --no-cache zlib-dev && \
+    apk add --no-cache --virtual zlib-dev && \
     docker-php-ext-install zip && \
 
-    apk add --no-cache libpng-dev && \
+    apk add --no-cache --virtual libpng-dev && \
     docker-php-ext-install gd
 
 # Install APCu
@@ -57,27 +56,23 @@ RUN apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS && \
     apk del .phpize-deps
 
 # Install shlink
-RUN php -r "readfile('https://getcomposer.org/installer');" | php && \
-    chmod +x composer.phar && \
-    php composer.phar create-project shlinkio/shlink:$SHLINK_VERSION --prefer-dist --no-dev --no-interaction && \
-    cd shlink && \
-    php ../composer.phar require zendframework/zend-expressive-swoole:$EXPRESSIVE_SWOOLE_VERSION --prefer-dist --update-no-dev && \
-    sed -i "s/%SHLINK_VERSION%/${SHLINK_VERSION}/g" config/autoload/app_options.global.php && \
-    php ../composer.phar dump-autoload --optimize --apcu --classmap-authoritative --no-dev && \
-    rm ../composer.phar && \
-    rm -rf ~/.composer
+RUN curl -Ls https://github.com/shlinkio/shlink/releases/download/v${SHLINK_VERSION}/shlink_${SHLINK_VERSION}_dist.zip --output /tmp/shlink.zip && \
+    unzip /tmp/shlink.zip -d /etc/shlink && \
+    mv shlink_${SHLINK_VERSION}_dist/* . && \
+    rm -rf shlink_${SHLINK_VERSION}_dist && \
+    rm -f /tmp/shlink.zip
 
 # Add shlink to the path to ease running it after container is created
-RUN ln -s /var/html/shlink/bin/cli /usr/local/bin/shlink
+RUN ln -s /etc/shlink/bin/cli /usr/local/bin/shlink
 
-# Add swoole config to the project
-ADD config/shlink_in_docker.global.php shlink/config/autoload/shlink_in_docker.global.php
+# Add shlink in docker config to the project
+ADD config/shlink_in_docker.global.php config/autoload/shlink_in_docker.global.php
 
 # Expose swoole port
 EXPOSE 8080
 
 # Expose params config dir, since the user is expected to provide custom config from there
-VOLUME shlink/config/params
+VOLUME config/params
 
 ADD docker-entrypoint.sh docker-entrypoint.sh
 ENTRYPOINT ["/bin/sh", "./docker-entrypoint.sh"]
