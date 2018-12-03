@@ -66,7 +66,7 @@ RUN curl -Ls https://github.com/shlinkio/shlink/releases/download/v${SHLINK_VERS
 RUN ln -s /etc/shlink/bin/cli /usr/local/bin/shlink
 
 # Add shlink in docker config to the project
-ADD config/shlink_in_docker.global.php config/autoload/shlink_in_docker.global.php
+ADD config/shlink_in_docker.local.php config/autoload/shlink_in_docker.local.php
 
 # Expose swoole port
 EXPOSE 8080
