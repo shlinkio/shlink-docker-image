@@ -17,7 +17,9 @@ It also expects these two env vars to be provided, in order to properly generate
 
 So based on this, to run shlink on a local docker service, you should run a command like this:
 
-    docker run --name shlink -p 8080:8080 -e SHORT_DOMAIN_HOST=doma.in -e SHORT_DOMAIN_SCHEMA=https shlinkio/shlink
+```bash
+docker run --name shlink -p 8080:8080 -e SHORT_DOMAIN_HOST=doma.in -e SHORT_DOMAIN_SCHEMA=https shlinkio/shlink
+```
 
 ### Interact with shlink's CLI on a running container.
 
@@ -38,11 +40,15 @@ It is possible to use a set of env vars to make this shlink instance interact wi
 
 Taking this into account, you could run set up shlink on a local docker service like this:
 
-    docker run --name shlink -p 8080:8080 -e SHORT_DOMAIN_HOST=doma.in -e SHORT_DOMAIN_SCHEMA=https -e DB_DRIVER=mysql -e DB_USER=root -e DB_PASSWORD=123abc -e DB_HOST=something.rds.amazonaws.com shlinkio/shlink
+```bash
+docker run --name shlink -p 8080:8080 -e SHORT_DOMAIN_HOST=doma.in -e SHORT_DOMAIN_SCHEMA=https -e DB_DRIVER=mysql -e DB_USER=root -e DB_PASSWORD=123abc -e DB_HOST=something.rds.amazonaws.com shlinkio/shlink
+```
 
 You could even link to a local database running on a different container:
 
-    docker run --name shlink -p 8080:8080 [...] -e DB_HOST=some_mysql_container --link some_mysql_container shlinkio/shlink
+```bash
+docker run --name shlink -p 8080:8080 [...] -e DB_HOST=some_mysql_container --link some_mysql_container shlinkio/shlink
+```
 
 ## Supported env vars
 
@@ -58,6 +64,11 @@ This is the complete list of supported env vars:
 * `DB_PASSWORD`: The password credential to be used when the driver is mysql.
 * `DB_HOST`: The host name of the database server  when the driver is mysql.
 * `DB_PORT`: The port in which the database service is running when the driver is mysql. Defaults to **3306**.
+* `DISABLE_TRACK_PARAM`: The name of a query param that can be used to visit short URLs avoiding the visit to be tracked. This feature won't be available if not value is provided.
+* `DELETE_SHORT_URL_THRESHOLD`: The amount of visits on short URLs which will not allow them to be deleted. Defaults to `15`.
+* `LOCALE`: Defines the default language for error pages when a user accesses a short URL which does not exist. Supported values are **es** and **en**. Defaults to **en**.
+* `VALIDATE_URLS`: Boolean which tells if shlink should validate a status 20x (after following redirects) is returned when trying to shorten a URL. Defaults to `true`.
+* `NOT_FOUND_REDIRECT_TO`: If a URL is provided here, when a user tries to access an invalid short URL, he/she will be redirected to this value. If this env var is not provided, the user will see a generic `404 - not found` page.
 
 ## Versions
 

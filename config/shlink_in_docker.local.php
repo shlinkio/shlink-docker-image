@@ -42,13 +42,32 @@ $helper = new class {
             ],
         ];
     }
+
+    public function getNotFoundConfig(): array
+    {
+        $notFoundRedirectTo = env('NOT_FOUND_REDIRECT_TO');
+
+        return [
+            'enable_redirection' => $notFoundRedirectTo !== null,
+            'redirect_to' => $notFoundRedirectTo,
+        ];
+    }
 };
 
 return [
 
     'app_options' => [
         'secret_key' => $helper->generateSecretKey(),
-        'disable_track_param' => null,
+        'disable_track_param' => env('DISABLE_TRACK_PARAM'),
+    ],
+
+    'delete_short_urls' => [
+        'check_visits_threshold' => true,
+        'visits_threshold' => (int) env('DELETE_SHORT_URL_THRESHOLD', 15),
+    ],
+
+    'translator' => [
+        'locale' => env('LOCALE', 'en'),
     ],
 
     'entity_manager' => [
@@ -61,7 +80,8 @@ return [
             'hostname' => env('SHORT_DOMAIN_HOST', ''),
         ],
         'shortcode_chars' => $helper->generateShortcodeChars(),
-        'validate_url' => true,
+        'validate_url' => (bool) env('VALIDATE_URLS', true),
+        'not_found_short_url' => $helper->getNotFoundConfig(),
     ],
 
 ];
