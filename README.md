@@ -23,7 +23,33 @@ docker run --name shlink -p 8080:8080 -e SHORT_DOMAIN_HOST=doma.in -e SHORT_DOMA
 
 ### Interact with shlink's CLI on a running container.
 
-### Interact with shlink's CLI as a stopped container entry point.
+Once the shlink container is running, you can interact with the CLI tool by running `shlink` with any of the supported commands.
+
+For example, if the container is called `shlink_container`, you can generate a new API key with:
+
+```bash
+docker exec -it shlink_container shlink api-key:generate
+```
+
+Or you can list all tags with:
+
+```bash
+docker exec -it shlink_container shlink tag:list
+```
+
+Or process remaining visits with:
+
+```bash
+docker exec -it shlink_container shlink visit:process
+```
+
+All shlink commands will work the same way.
+
+You can also list all available commands just by running this:
+
+```bash
+docker exec -it shlink_container shlink
+```
 
 ## Use external DB
 

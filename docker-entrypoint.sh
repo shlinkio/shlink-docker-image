@@ -3,7 +3,7 @@ set -e
 
 cd /etc/shlink
 
-# If proxies have not been generated yet, run migrations and generate proxies
+# If proxies have not been generated yet, run first-time operations
 if ! [[ $(ls -A data/proxies) ]]; then
     rm -f data/cache/app_config.php
     php vendor/doctrine/orm/bin/doctrine.php orm:schema-tool:create
