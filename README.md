@@ -10,7 +10,7 @@ It exposes a shlink instance served with [swoole](https://www.swoole.co.uk/), wh
 
 Shlink docker image exposes port `8080` in order to interact with its HTTP interface.
 
-It also expects these two en vars be provided, in order to properly generate short URLs at runtime.
+It also expects these two env vars to be provided, in order to properly generate short URLs at runtime.
 
 * `SHORT_DOMAIN_HOST`: The custom short domain used for this shlink instance. For example **doma.in**.
 * `SHORT_DOMAIN_SCHEMA`: Either **http** or **https**.
