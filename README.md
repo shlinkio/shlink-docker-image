@@ -51,7 +51,7 @@ You can also list all available commands just by running this:
 docker exec -it shlink_container shlink
 ```
 
-## Use external DB
+## Use an external DB
 
 The image comes with a working sqlite database, but in production you will probably want to usa a distributed database.
 
@@ -95,6 +95,26 @@ This is the complete list of supported env vars:
 * `LOCALE`: Defines the default language for error pages when a user accesses a short URL which does not exist. Supported values are **es** and **en**. Defaults to **en**.
 * `VALIDATE_URLS`: Boolean which tells if shlink should validate a status 20x (after following redirects) is returned when trying to shorten a URL. Defaults to `true`.
 * `NOT_FOUND_REDIRECT_TO`: If a URL is provided here, when a user tries to access an invalid short URL, he/she will be redirected to this value. If this env var is not provided, the user will see a generic `404 - not found` page.
+
+An example using all env vars could look like this:
+
+```bash
+docker run \
+    --name shlink \
+    -p 8080:8080 \
+    -e SHORT_DOMAIN_HOST=doma.in \
+    -e SHORT_DOMAIN_SCHEMA=https \
+    -e DB_DRIVER=mysql \
+    -e DB_USER=root \
+    -e DB_PASSWORD=123abc \
+    -e DB_HOST=something.rds.amazonaws.com \
+    -e "DISABLE_TRACK_PARAM=no-track" \
+    -e DELETE_SHORT_URL_THRESHOLD=30 \
+    -e LOCALE=es \
+    -e VALIDATE_URLS=false \
+    -e "NOT_FOUND_REDIRECT_TO=https://www.google.com" \
+    shlinkio/shlink
+```
 
 ## Versions
 
