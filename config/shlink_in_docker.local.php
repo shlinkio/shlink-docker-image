@@ -57,8 +57,8 @@ return [
 
     'url_shortener' => [
         'domain' => [
-            'schema' => env('DOMAIN_SCHEMA', 'http'),
-            'hostname' => env('DOMAIN_HOST', ''),
+            'schema' => env('SHORT_DOMAIN_SCHEMA', 'http'),
+            'hostname' => env('SHORT_DOMAIN_HOST', ''),
         ],
         'shortcode_chars' => $helper->generateShortcodeChars(),
         'validate_url' => true,
