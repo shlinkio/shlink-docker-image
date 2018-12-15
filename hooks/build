@@ -1,0 +1,12 @@
+#!/bin/bash
+set -ex
+
+docker build --build-arg SHLINK_VERSION=${SOURCE_BRANCH#?} -t ${IMAGE_NAME} .
+
+# Trigger build examples:
+
+# Trigger build for docker tag "latest" based on shlink "v1.15.1"
+# curl -H "Content-Type: application/json" --data '{"docker_tag": "latest", "source_type": "Tag", "source_name": "v1.15.1"}' -X POST https://registry.hub.docker.com/u/shlinkio/shlink/trigger/TOKEN/
+
+# Trigger build for docker tag "v1.15.1" based on same shlink version
+# curl -H "Content-Type: application/json" --data '{"docker_tag": "v1.15.1", "source_type": "Tag", "source_name": "v1.15.1"}' -X POST https://registry.hub.docker.com/u/shlinkio/shlink/trigger/TOKEN/
