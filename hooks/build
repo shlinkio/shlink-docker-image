@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-docker build --build-arg SHLINK_VERSION=${SOURCE_BRANCH#?} -t ${IMAGE_NAME} .
+docker build --build-arg SHLINK_VERSION=${CACHE_TAG#?} -t ${IMAGE_NAME} .
 
 # Trigger build examples:
 
