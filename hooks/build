@@ -1,12 +1,16 @@
 #!/bin/bash
 set -ex
 
-docker build --build-arg SHLINK_VERSION=${CACHE_TAG#?} -t ${IMAGE_NAME} .
+get_latest_release() {
+  curl --silent "https://api.github.com/repos/shlinkio/shlink/releases/latest" | # Get latest release from GitHub api
+    grep '"tag_name":' |                                                         # Get tag line
+    sed -E 's/.*"([^"]+)".*/\1/'                                                 # Pluck JSON value
+}
 
-# Trigger build examples:
+if [[ ${CACHE_TAG} == 'latest' ]]; then
+    SHLINK_RELEASE=$(get_latest_release)
+else
+    SHLINK_RELEASE=${CACHE_TAG}
+fi
 
-# Trigger build for docker tag "latest" based on shlink "v1.15.1"
-# curl -H "Content-Type: application/json" --data '{"docker_tag": "latest", "source_type": "Tag", "source_name": "v1.15.1"}' -X POST https://registry.hub.docker.com/u/shlinkio/shlink/trigger/TOKEN/
-
-# Trigger build for docker tag "v1.15.1" based on same shlink version
-# curl -H "Content-Type: application/json" --data '{"docker_tag": "v1.15.1", "source_type": "Tag", "source_name": "v1.15.1"}' -X POST https://registry.hub.docker.com/u/shlinkio/shlink/trigger/TOKEN/
+docker build --build-arg SHLINK_VERSION=${SHLINK_RELEASE#?} -t ${IMAGE_NAME} .
