@@ -7,10 +7,10 @@ get_latest_release() {
     sed -E 's/.*"([^"]+)".*/\1/'                                                 # Pluck JSON value
 }
 
-if [[ -z ${CACHE_TAG} ]]; then
+if [[ ${SOURCE_BRANCH} == 'master' ]]; then
     SHLINK_RELEASE=$(get_latest_release)
 else
-    SHLINK_RELEASE=${CACHE_TAG}
+    SHLINK_RELEASE=${SOURCE_BRANCH}
 fi
 
 docker build --build-arg SHLINK_VERSION=${SHLINK_RELEASE#?} -t ${IMAGE_NAME} .
