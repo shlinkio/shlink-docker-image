@@ -67,7 +67,7 @@ RUN wget https://github.com/shlinkio/shlink/releases/download/v${SHLINK_VERSION}
 RUN ln -s /etc/shlink/bin/cli /usr/local/bin/shlink
 
 # Add shlink in docker config to the project
-ADD config/shlink_in_docker.local.php config/autoload/shlink_in_docker.local.php
+COPY config/shlink_in_docker.local.php config/autoload/shlink_in_docker.local.php
 
 # Expose swoole port
 EXPOSE 8080
@@ -75,5 +75,5 @@ EXPOSE 8080
 # Expose params config dir, since the user is expected to provide custom config from there
 VOLUME config/params
 
-ADD docker-entrypoint.sh docker-entrypoint.sh
+COPY docker-entrypoint.sh docker-entrypoint.sh
 ENTRYPOINT ["/bin/sh", "./docker-entrypoint.sh"]
