@@ -15,18 +15,18 @@ RUN apk update && \
     docker-php-ext-install -j$(nproc) calendar && \
 
     # Install sqlite
-    apk add --no-cache --virtual sqlite-libs && \
-    apk add --no-cache --virtual sqlite-dev && \
+    apk add --no-cache sqlite-libs && \
+    apk add --no-cache sqlite-dev && \
     docker-php-ext-install -j$(nproc) pdo_sqlite && \
 
     # Install other PHP packages that depend on other system packages
-    apk add --no-cache --virtual icu-dev && \
+    apk add --no-cache icu-dev && \
     docker-php-ext-install -j$(nproc) intl && \
 
-    apk add --no-cache --virtual zlib-dev && \
+    apk add --no-cache zlib-dev && \
     docker-php-ext-install -j$(nproc) zip && \
 
-    apk add --no-cache --virtual libpng-dev && \
+    apk add --no-cache libpng-dev && \
     docker-php-ext-install -j$(nproc) gd
 
 # Install APCu
