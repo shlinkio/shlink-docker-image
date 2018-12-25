@@ -9,32 +9,32 @@ WORKDIR /etc/shlink
 RUN apk update && \
 
     # Install common php extensions
-    docker-php-ext-install pdo_mysql && \
-    docker-php-ext-install iconv && \
-    docker-php-ext-install mbstring && \
-    docker-php-ext-install calendar && \
+    docker-php-ext-install -j$(nproc) pdo_mysql && \
+    docker-php-ext-install -j$(nproc) iconv && \
+    docker-php-ext-install -j$(nproc) mbstring && \
+    docker-php-ext-install -j$(nproc) calendar && \
 
     # Install sqlite
     apk add --no-cache --virtual sqlite-libs && \
     apk add --no-cache --virtual sqlite-dev && \
-    docker-php-ext-install pdo_sqlite && \
+    docker-php-ext-install -j$(nproc) pdo_sqlite && \
 
     # Install other PHP packages that depend on other system packages
     apk add --no-cache --virtual icu-dev && \
-    docker-php-ext-install intl && \
+    docker-php-ext-install -j$(nproc) intl && \
 
     apk add --no-cache --virtual zlib-dev && \
-    docker-php-ext-install zip && \
+    docker-php-ext-install -j$(nproc) zip && \
 
     apk add --no-cache --virtual libpng-dev && \
-    docker-php-ext-install gd
+    docker-php-ext-install -j$(nproc) gd
 
 # Install APCu
 RUN wget https://pecl.php.net/get/apcu-5.1.3.tgz -O /tmp/apcu.tar.gz && \
     mkdir -p /usr/src/php/ext/apcu && \
     tar xf /tmp/apcu.tar.gz -C /usr/src/php/ext/apcu --strip-components=1 && \
     docker-php-ext-configure apcu && \
-    docker-php-ext-install apcu && \
+    docker-php-ext-install -j$(nproc) apcu && \
     rm /tmp/apcu.tar.gz
 
 # Install APCu-BC extension
@@ -42,7 +42,7 @@ RUN wget https://pecl.php.net/get/apcu_bc-1.0.3.tgz -O /tmp/apcu_bc.tar.gz && \
     mkdir -p /usr/src/php/ext/apcu-bc && \
     tar xf /tmp/apcu_bc.tar.gz -C /usr/src/php/ext/apcu-bc --strip-components=1 && \
     docker-php-ext-configure apcu-bc && \
-    docker-php-ext-install apcu-bc && \
+    docker-php-ext-install -j$(nproc) apcu-bc && \
     rm /tmp/apcu_bc.tar.gz
 
 # Load APCU.ini before APC.ini
