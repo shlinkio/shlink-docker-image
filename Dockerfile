@@ -30,16 +30,16 @@ RUN apk update && \
     docker-php-ext-install gd
 
 # Install APCu
-ADD https://pecl.php.net/get/apcu-5.1.3.tgz /tmp/apcu.tar.gz
-RUN mkdir -p /usr/src/php/ext/apcu && \
+RUN wget https://pecl.php.net/get/apcu-5.1.3.tgz -O /tmp/apcu.tar.gz && \
+    mkdir -p /usr/src/php/ext/apcu && \
     tar xf /tmp/apcu.tar.gz -C /usr/src/php/ext/apcu --strip-components=1 && \
     docker-php-ext-configure apcu && \
     docker-php-ext-install apcu && \
     rm /tmp/apcu.tar.gz
 
 # Install APCu-BC extension
-ADD https://pecl.php.net/get/apcu_bc-1.0.3.tgz /tmp/apcu_bc.tar.gz
-RUN mkdir -p /usr/src/php/ext/apcu-bc && \
+RUN wget https://pecl.php.net/get/apcu_bc-1.0.3.tgz -O /tmp/apcu_bc.tar.gz && \
+    mkdir -p /usr/src/php/ext/apcu-bc && \
     tar xf /tmp/apcu_bc.tar.gz -C /usr/src/php/ext/apcu-bc --strip-components=1 && \
     docker-php-ext-configure apcu-bc && \
     docker-php-ext-install apcu-bc && \
