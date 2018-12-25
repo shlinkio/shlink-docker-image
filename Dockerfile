@@ -9,23 +9,18 @@ WORKDIR /etc/shlink
 RUN apk update && \
 
     # Install common php extensions
-    docker-php-ext-install -j$(nproc) pdo_mysql && \
-    docker-php-ext-install -j$(nproc) calendar && \
+    docker-php-ext-install -j$(nproc) pdo_mysql calendar && \
 
     # Install sqlite
-    apk add --no-cache sqlite-libs && \
-    apk add --no-cache sqlite-dev && \
+    apk add --no-cache sqlite-libs sqlite-dev && \
     docker-php-ext-install -j$(nproc) pdo_sqlite && \
 
     # Install other PHP packages that depend on other system packages
     apk add --no-cache icu-dev && \
     docker-php-ext-install -j$(nproc) intl && \
 
-    apk add --no-cache zlib-dev && \
-    docker-php-ext-install -j$(nproc) zip && \
-
-    apk add --no-cache libpng-dev && \
-    docker-php-ext-install -j$(nproc) gd
+    apk add --no-cache zlib-dev libpng-dev && \
+    docker-php-ext-install -j$(nproc) zip gd
 
 # Install APCu
 RUN wget https://pecl.php.net/get/apcu-5.1.3.tgz -O /tmp/apcu.tar.gz && \
