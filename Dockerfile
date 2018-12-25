@@ -10,8 +10,6 @@ RUN apk update && \
 
     # Install common php extensions
     docker-php-ext-install -j$(nproc) pdo_mysql && \
-    docker-php-ext-install -j$(nproc) iconv && \
-    docker-php-ext-install -j$(nproc) mbstring && \
     docker-php-ext-install -j$(nproc) calendar && \
 
     # Install sqlite
