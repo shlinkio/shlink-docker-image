@@ -57,7 +57,7 @@ RUN apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS && \
     apk del .phpize-deps
 
 # Install shlink
-RUN curl -Ls https://github.com/shlinkio/shlink/releases/download/v${SHLINK_VERSION}/shlink_${SHLINK_VERSION}_dist.zip --output /tmp/shlink.zip && \
+RUN wget https://github.com/shlinkio/shlink/releases/download/v${SHLINK_VERSION}/shlink_${SHLINK_VERSION}_dist.zip -O /tmp/shlink.zip && \
     unzip /tmp/shlink.zip -d /etc/shlink && \
     mv shlink_${SHLINK_VERSION}_dist/* . && \
     rm -rf shlink_${SHLINK_VERSION}_dist && \
