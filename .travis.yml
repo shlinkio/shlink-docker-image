@@ -1,0 +1,11 @@
+dist: xenial
+language: minimal
+
+services:
+  - docker
+
+git:
+  depth: 5
+
+script:
+  - docker build -t shlink-docker-image:temp .
