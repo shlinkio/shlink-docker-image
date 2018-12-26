@@ -11,25 +11,25 @@ WORKDIR /etc/shlink
 RUN apk update && \
 
     # Install common php extensions
-    docker-php-ext-install -j$(nproc) pdo_mysql calendar && \
+    docker-php-ext-install -j"$(nproc)" pdo_mysql calendar && \
 
     # Install sqlite
     apk add --no-cache sqlite-libs sqlite-dev && \
-    docker-php-ext-install -j$(nproc) pdo_sqlite && \
+    docker-php-ext-install -j"$(nproc)" pdo_sqlite && \
 
     # Install other PHP packages that depend on other system packages
     apk add --no-cache icu-dev && \
-    docker-php-ext-install -j$(nproc) intl && \
+    docker-php-ext-install -j"$(nproc)" intl && \
 
     apk add --no-cache zlib-dev libpng-dev && \
-    docker-php-ext-install -j$(nproc) zip gd
+    docker-php-ext-install -j"$(nproc)" zip gd
 
 # Install APCu
 RUN wget "https://pecl.php.net/get/apcu-${APCu_VERSION}.tgz" -O /tmp/apcu.tar.gz && \
     mkdir -p /usr/src/php/ext/apcu && \
     tar xf /tmp/apcu.tar.gz -C /usr/src/php/ext/apcu --strip-components=1 && \
     docker-php-ext-configure apcu && \
-    docker-php-ext-install -j$(nproc) apcu && \
+    docker-php-ext-install -j"$(nproc)" apcu && \
     rm /tmp/apcu.tar.gz
 
 # Install APCu-BC extension
@@ -37,7 +37,7 @@ RUN wget "https://pecl.php.net/get/apcu_bc-${APCuBC_VERSION}.tgz" -O /tmp/apcu_b
     mkdir -p /usr/src/php/ext/apcu-bc && \
     tar xf /tmp/apcu_bc.tar.gz -C /usr/src/php/ext/apcu-bc --strip-components=1 && \
     docker-php-ext-configure apcu-bc && \
-    docker-php-ext-install -j$(nproc) apcu-bc && \
+    docker-php-ext-install -j"$(nproc)" apcu-bc && \
     rm /tmp/apcu_bc.tar.gz
 
 # Load APCU.ini before APC.ini
