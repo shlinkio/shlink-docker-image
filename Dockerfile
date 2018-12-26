@@ -3,6 +3,8 @@ MAINTAINER Alejandro Celaya <alejandro@alejandrocelaya.com>
 
 ARG SHLINK_VERSION=1.15.0
 ENV SHLINK_VERSION ${SHLINK_VERSION}
+ENV APCu_VERSION 5.1.3
+ENV APCuBC_VERSION 1.0.3
 
 WORKDIR /etc/shlink
 
@@ -23,7 +25,7 @@ RUN apk update && \
     docker-php-ext-install -j$(nproc) zip gd
 
 # Install APCu
-RUN wget https://pecl.php.net/get/apcu-5.1.3.tgz -O /tmp/apcu.tar.gz && \
+RUN wget "https://pecl.php.net/get/apcu-${APCu_VERSION}.tgz" -O /tmp/apcu.tar.gz && \
     mkdir -p /usr/src/php/ext/apcu && \
     tar xf /tmp/apcu.tar.gz -C /usr/src/php/ext/apcu --strip-components=1 && \
     docker-php-ext-configure apcu && \
@@ -31,7 +33,7 @@ RUN wget https://pecl.php.net/get/apcu-5.1.3.tgz -O /tmp/apcu.tar.gz && \
     rm /tmp/apcu.tar.gz
 
 # Install APCu-BC extension
-RUN wget https://pecl.php.net/get/apcu_bc-1.0.3.tgz -O /tmp/apcu_bc.tar.gz && \
+RUN wget "https://pecl.php.net/get/apcu_bc-${APCuBC_VERSION}.tgz" -O /tmp/apcu_bc.tar.gz && \
     mkdir -p /usr/src/php/ext/apcu-bc && \
     tar xf /tmp/apcu_bc.tar.gz -C /usr/src/php/ext/apcu-bc --strip-components=1 && \
     docker-php-ext-configure apcu-bc && \
