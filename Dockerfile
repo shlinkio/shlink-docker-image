@@ -1,5 +1,5 @@
 FROM php:7.2.12-cli-alpine3.8
-MAINTAINER Alejandro Celaya <alejandro@alejandrocelaya.com>
+LABEL maintainer="Alejandro Celaya <alejandro@alejandrocelaya.com>"
 
 ARG SHLINK_VERSION=1.15.0
 ENV SHLINK_VERSION ${SHLINK_VERSION}
