@@ -1,5 +1,12 @@
 # Shlink Docker image
 
+[![Build Status](https://img.shields.io/travis/shlinkio/shlink-docker-image.svg?style=flat-square)](https://travis-ci.org/shlinkio/shlink-docker-image)
+[![Docker build status](https://img.shields.io/docker/build/shlinkio/shlink.svg?style=flat-square)](https://hub.docker.com/r/shlinkio/shlink/)
+[![Docker pulls](https://img.shields.io/docker/pulls/shlinkio/shlink.svg?style=flat-square)](https://hub.docker.com/r/shlinkio/shlink/)
+[![Latest Stable Version](https://img.shields.io/github/tag/shlinkio/shlink-docker-image.svg?style=flat-square)](https://github.com/shlinkio/shlink-docker-image/releases/latest)
+[![License](https://img.shields.io/github/license/shlinkio/shlink-docker-image.svg?style=flat-square)](https://github.com/shlinkio/shlink-docker-image/blob/master/LICENSE)
+[![Paypal donate](https://img.shields.io/badge/Donate-paypal-blue.svg?style=flat-square&logo=paypal&colorA=aaaaaa)](https://acel.me/donate)
+
 [Shlink](https://shlink.io) is a self-hosted URL shortener which includes both a REST and a CLI interface in order to interact with it.
 
 This image provides an easy way to set up [shlink](https://shlink.io) on a container-based runtime.
