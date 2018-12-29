@@ -8,7 +8,7 @@ ENV APCuBC_VERSION 1.0.3
 
 WORKDIR /etc/shlink
 
-RUN apk update && \
+RUN \
 
     # Install common php extensions
     docker-php-ext-install -j"$(nproc)" pdo_mysql calendar && \
