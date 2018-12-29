@@ -21,7 +21,7 @@ RUN \
     apk add --no-cache icu-dev && \
     docker-php-ext-install -j"$(nproc)" intl && \
 
-    apk add --no-cache zlib-dev libpng-dev && \
+    apk add --no-cache libzip zlib-dev libpng-dev && \
     docker-php-ext-install -j"$(nproc)" zip gd
 
 # Install APCu
