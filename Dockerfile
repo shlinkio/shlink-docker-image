@@ -1,4 +1,4 @@
-FROM php:7.2.13-cli-alpine3.8
+FROM php:7.3.0-cli-alpine3.8
 LABEL maintainer="Alejandro Celaya <alejandro@alejandrocelaya.com>"
 
 ARG SHLINK_VERSION=1.15.1
