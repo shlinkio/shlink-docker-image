@@ -1,7 +1,7 @@
 FROM php:7.2.13-cli-alpine3.8
 LABEL maintainer="Alejandro Celaya <alejandro@alejandrocelaya.com>"
 
-ARG SHLINK_VERSION=1.15.0
+ARG SHLINK_VERSION=1.15.1
 ENV SHLINK_VERSION ${SHLINK_VERSION}
 ENV APCu_VERSION 5.1.3
 ENV APCuBC_VERSION 1.0.3
