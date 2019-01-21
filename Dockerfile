@@ -3,8 +3,8 @@ LABEL maintainer="Alejandro Celaya <alejandro@alejandrocelaya.com>"
 
 ARG SHLINK_VERSION=1.15.1
 ENV SHLINK_VERSION ${SHLINK_VERSION}
-ENV APCu_VERSION 5.1.3
-ENV APCuBC_VERSION 1.0.3
+ENV APCu_VERSION 5.1.16
+ENV APCuBC_VERSION 1.0.4
 
 WORKDIR /etc/shlink
 
@@ -21,7 +21,7 @@ RUN \
     apk add --no-cache icu-dev && \
     docker-php-ext-install -j"$(nproc)" intl && \
 
-    apk add --no-cache libzip zlib-dev libpng-dev && \
+    apk add --no-cache libzip-dev zlib-dev libpng-dev && \
     docker-php-ext-install -j"$(nproc)" zip gd
 
 # Install APCu
