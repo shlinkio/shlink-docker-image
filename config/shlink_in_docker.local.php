@@ -24,20 +24,22 @@ $helper = new class {
 
     public function __construct()
     {
-        $keysFile = sprintf('%s/shlink.keys', sys_get_temp_dir());
-        [$this->charset, $this->secretKey] = file_exists($keysFile)
-            ? explode(',', file_get_contents($keysFile))
-            : $this->initShlinkKeys();
+        [$this->charset, $this->secretKey] = $this->initShlinkKeys();
     }
 
     private function initShlinkKeys(): array
     {
+        $keysFile = sprintf('%s/shlink.keys', sys_get_temp_dir());
+        if (file_exists($keysFile)) {
+            return explode(',', file_get_contents($keysFile));
+        }
+
         $keys = [
             $this->generateShortcodeChars(),
             $this->generateSecretKey(),
         ];
 
-        file_put_contents(sprintf('%s/shlink.keys', sys_get_temp_dir()), implode(',', $keys));
+        file_put_contents($keysFile, implode(',', $keys));
         return $keys;
     }
 
