@@ -127,7 +127,7 @@ docker run \
 
 Rather than providing custom configuration via env vars, it is also possible ot provide config files in json format.
 
-Mounting a volume at `config/params` you will make shlink load all the json files on it.
+Mounting a volume at `config/params` you will make shlink load all the files on it with the prefix `.config.json`.
 
 The whole configuration should have this format, but it can be split into multiple files that will be merged:
 
@@ -171,7 +171,13 @@ The whole configuration should have this format, but it can be split into multip
 }
 ```
 
-This is how shlink internally expects the config. It currently requires knowing some implementation details, so it will be simplified in future versions while keeping it backwards compatible.
+> This is how shlink internally expects the config. It currently requires knowing some implementation details, but it will be simplified in future versions while keeping it backwards compatible.
+
+Once created just run shlink with the volume:
+
+```bash
+docker run --name shlink -p 8080:8080 -v ${PWD}/my/config/dir:/etc/shlink/config/params shlinkio/shlink
+```
 
 ## Versions
 
