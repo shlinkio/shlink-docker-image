@@ -123,6 +123,56 @@ docker run \
     shlinkio/shlink
 ```
 
+## Provide config via volumes
+
+Rather than providing custom configuration via env vars, it is also possible ot provide config files in json format.
+
+Mounting a volume at `config/params` you will make shlink load all the json files on it.
+
+The whole configuration should have this format, but it can be split into multiple files that will be merged:
+
+```json
+{
+    "app_options": {
+        "disable_track_param": "my_param"
+    },
+
+    "delete_short_urls": {
+        "check_visits_threshold": true,
+        "visits_threshold": 30
+    },
+
+    "translator": {
+        "locale": "es"
+    },
+
+    "entity_manager": {
+        "connection": {
+            "driver": "pdo_mysql",
+            "dbname": "shlink",
+            "user": "root",
+            "password": "123abc",
+            "host": "something.rds.amazonaws.com",
+            "port": "3306"
+        }
+    },
+
+    "url_shortener": {
+        "domain": {
+            "schema": "https",
+            "hostname": "doma.in"
+        },
+        "validate_url": false,
+        "not_found_short_url": {
+            "enable_redirection": true,
+            "redirect_to": "https://my-landing-page.com"
+        }
+    }
+}
+```
+
+This is how shlink internally expects the config. It currently requires knowing some implementation details, so it will be simplified in future versions while keeping it backwards compatible.
+
 ## Versions
 
 Currently, the versions of this image match the shlink version it contains.
