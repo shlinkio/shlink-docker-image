@@ -69,6 +69,10 @@ EXPOSE 8080
 
 # Expose params config dir, since the user is expected to provide custom config from there
 VOLUME config/params
+# Expose geolite db file, so that it can be shared among multiple shlink instances
+VOLUME data/GeoLite2-City.mmdb
+# Expose geolite db file, so that it can be shared among multiple shlink instances
+VOLUME /tmp/shlink.keys
 
 COPY docker-entrypoint.sh docker-entrypoint.sh
 ENTRYPOINT ["/bin/sh", "./docker-entrypoint.sh"]

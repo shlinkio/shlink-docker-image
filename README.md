@@ -123,6 +123,8 @@ docker run \
     shlinkio/shlink
 ```
 
+> There's also two more env vars supported, `SECRET_KEY` and `SHORTCODE_CHARS`, which are explained below, in the [Multi instance considerations](#multi-instance-considerations) section.
+
 ## Provide config via volumes
 
 Rather than providing custom configuration via env vars, it is also possible ot provide config files in json format.
@@ -178,6 +180,45 @@ Once created just run shlink with the volume:
 ```bash
 docker run --name shlink -p 8080:8080 -v ${PWD}/my/config/dir:/etc/shlink/config/params shlinkio/shlink
 ```
+
+## Multi instance considerations
+
+Running multiple instances of shlink is not fully supported yet. These are some considerations to take into account.
+
+* Shlink makes use of MaxMind's GeoLite2 in order to geolocate visits and the database file needs to be updated regularly.
+
+    If every container holds its own db file, you will need to find the way to run the `visit:update-db` command on every one of them.
+
+    However, you can share the file by using a volume to `/etc/shlink/data/GeoLite2-City.mmdb`. This way, you can use kubernetes jobs, or regular cronjobs which just run the command in one of the instances, and you will still get it updated for all of them.
+
+* Shlink will generate a couple keys the first time it is run, and save them in `/tmp/shlink.keys`.
+
+    One of these keys is the charset used to generate short codes, which is a shuffled base62 charset.
+
+    In order to make sure all shlink instances share these keys, follow these steps:
+
+    * Run a single shlink instance, so that the keys are generated.
+    * Stop the container, and before upscaling the service, do one of these things:
+        * Mount the file `/tmp/shlink.keys` in a volume.
+        * Provide the keys in a `config/params/keys.config.json` config file with this structure:
+
+            ```json
+            {
+                "app_options": {
+                    "secret_key": "<your_secret_key>"
+                },
+
+                "url_shortener": {
+                    "shortcode_chars": "<your_charset>"
+                }
+            }
+            ```
+
+        * Provide the keys using the `SECRET_KEY` and `SHORTCODE_CHARS` env vars.
+    * Some of these options require you to know the values of the keys. You can find them by reading the `/tmp/shlink.keys` file inside the container, which has the shortcode chars and then the secret key, separated by a comma.
+    * Now you can upscale the service.
+
+> At some point, more elegant ways to solve this will be provided.
 
 ## Versions
 
