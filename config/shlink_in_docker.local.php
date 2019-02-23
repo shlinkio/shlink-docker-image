@@ -35,8 +35,8 @@ $helper = new class {
         }
 
         $keys = [
-            $this->generateShortcodeChars(),
-            $this->generateSecretKey(),
+            env('SHORTCODE_CHARS', $this->generateShortcodeChars()),
+            env('SECRET_KEY', $this->generateSecretKey()),
         ];
 
         file_put_contents($keysFile, implode(',', $keys));
