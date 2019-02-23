@@ -204,17 +204,17 @@ Running multiple instances of shlink is not fully supported yet. These are some 
 
             ```json
             {
-                "app_options": {
-                    "secret_key": "<your_secret_key>"
-                },
-
                 "url_shortener": {
                     "shortcode_chars": "<your_charset>"
+                },
+
+                "app_options": {
+                    "secret_key": "<your_secret_key>"
                 }
             }
             ```
 
-        * Provide the keys using the `SECRET_KEY` and `SHORTCODE_CHARS` env vars.
+        * Provide the keys using the `SHORTCODE_CHARS` and `SECRET_KEY` env vars.
     * Some of these options require you to know the values of the keys. You can find them by reading the `/tmp/shlink.keys` file inside the container, which has the shortcode chars and then the secret key, separated by a comma.
     * Now you can upscale the service.
 
