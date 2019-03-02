@@ -74,6 +74,8 @@ It is possible to use a set of env vars to make this shlink instance interact wi
         * **mysql** -> `3306`
         * **postgres** -> `5432`
 
+> PostgreSQL is supported since v1.16.1 of this image. Do not try to use it with previous versions.
+
 Taking this into account, you could run shlink on a local docker service like this:
 
 ```bash
