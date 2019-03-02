@@ -17,6 +17,10 @@ RUN \
     apk add --no-cache sqlite-libs sqlite-dev && \
     docker-php-ext-install -j"$(nproc)" pdo_sqlite && \
 
+    # Install postgre
+    apk add --no-cache postgresql-dev && \
+    docker-php-ext-install -j"$(nproc)" pdo_pgsql && \
+
     # Install other PHP packages that depend on other system packages
     apk add --no-cache icu-dev && \
     docker-php-ext-install -j"$(nproc)" intl && \
@@ -68,7 +72,7 @@ COPY config/shlink_in_docker.local.php config/autoload/shlink_in_docker.local.ph
 EXPOSE 8080
 
 # Expose params config dir, since the user is expected to provide custom config from there
-VOLUME config/params
+VOLUME /etc/shlink/config/params
 
 COPY docker-entrypoint.sh docker-entrypoint.sh
 ENTRYPOINT ["/bin/sh", "./docker-entrypoint.sh"]

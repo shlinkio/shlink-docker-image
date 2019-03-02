@@ -62,16 +62,21 @@ docker exec -it shlink_container shlink
 
 The image comes with a working sqlite database, but in production you will probably want to usa a distributed database.
 
-It is possible to use a set of env vars to make this shlink instance interact with an external MySQL database (PostgreSQL support will be included soon).
+It is possible to use a set of env vars to make this shlink instance interact with an external MySQL or PostgreSQL database.
 
-* `DB_DRIVER`: **[Mandatory]**. Use the value **mysql** to prevent the sqlite database to be used.
+* `DB_DRIVER`: **[Mandatory]**. Use the value **mysql** or **postgres** to prevent the sqlite database to be used.
 * `DB_NAME`: [Optional]. The database name to be used. Defaults to **shlink**.
-* `DB_USER`: **[Mandatory]**. The username credential for the MySQL server.
-* `DB_PASSWORD`: **[Mandatory]**. The password credential for the MySQL server.
-* `DB_HOST`: **[Mandatory]**. The host name of the server running the MySQL engine.
-* `DB_PORT`: [Optional]. The port in which the MySQL service is running. Defaults to **3306**.
+* `DB_USER`: **[Mandatory]**. The username credential for the database server.
+* `DB_PASSWORD`: **[Mandatory]**. The password credential for the database server.
+* `DB_HOST`: **[Mandatory]**. The host name of the server running the database engine.
+* `DB_PORT`: [Optional]. The port in which the database service is running.
+    * Default value is based on the driver:
+        * **mysql** -> `3306`
+        * **postgres** -> `5432`
 
-Taking this into account, you could run set up shlink on a local docker service like this:
+> PostgreSQL is supported since v1.16.1 of this image. Do not try to use it with previous versions.
+
+Taking this into account, you could run shlink on a local docker service like this:
 
 ```bash
 docker run --name shlink -p 8080:8080 -e SHORT_DOMAIN_HOST=doma.in -e SHORT_DOMAIN_SCHEMA=https -e DB_DRIVER=mysql -e DB_USER=root -e DB_PASSWORD=123abc -e DB_HOST=something.rds.amazonaws.com shlinkio/shlink
@@ -173,7 +178,7 @@ The whole configuration should have this format, but it can be split into multip
 }
 ```
 
-> This is how shlink internally expects the config. It currently requires knowing some implementation details, but it will be simplified in future versions while keeping it backwards compatible.
+> This is how shlink internally expects the config. It currently requires knowing some implementation details, but it will be simplified in future versions of shlink, while keeping it backwards compatible.
 
 Once created just run shlink with the volume:
 
@@ -218,7 +223,7 @@ Running multiple instances of shlink is not fully supported yet. These are some 
     * Some of these options require you to know the values of the keys. You can find them by reading the `/tmp/shlink.keys` file inside the container, which has the shortcode chars and then the secret key, separated by a comma.
     * Now you can upscale the service.
 
-> At some point, more elegant ways to solve this will be provided.
+> At some point, more elegant ways to solve these issues will be provided.
 
 ## Versions
 
