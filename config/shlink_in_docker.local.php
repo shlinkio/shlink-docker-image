@@ -16,6 +16,14 @@ use function sys_get_temp_dir;
 
 $helper = new class {
     private const BASE62 = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    private const DB_DRIVERS_MAP = [
+        'mysql' => 'pdo_mysql',
+        'postgres' => 'pdo_pgsql',
+    ];
+    private const DB_PORTS_MAP = [
+        'mysql' => '3306',
+        'postgres' => '5432',
+    ];
 
     /** @var string */
     private $charset;
@@ -73,17 +81,18 @@ $helper = new class {
             ];
         }
 
+        $driverOptions = $driver === 'mysql' ? [
+            // PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+            1002 => 'SET NAMES utf8',
+        ] : [];
         return [
-            'driver' => 'pdo_mysql',
+            'driver' => self::DB_DRIVERS_MAP[$driver],
             'dbname' => env('DB_NAME', 'shlink'),
             'user' => env('DB_USER'),
             'password' => env('DB_PASSWORD'),
             'host' => env('DB_HOST'),
-            'port' => env('DB_PORT', '3306'),
-            'driverOptions' => [
-                // PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
-                1002 => 'SET NAMES utf8',
-            ],
+            'port' => env('DB_PORT', self::DB_PORTS_MAP[$driver]),
+            'driverOptions' => $driverOptions,
         ];
     }
 
