@@ -1,7 +1,7 @@
 # Shlink Docker image
 
 [![Build Status](https://img.shields.io/travis/shlinkio/shlink-docker-image.svg?style=flat-square)](https://travis-ci.org/shlinkio/shlink-docker-image)
-[![Docker build status](https://img.shields.io/docker/build/shlinkio/shlink.svg?style=flat-square)](https://hub.docker.com/r/shlinkio/shlink/)
+[![Docker build status](https://img.shields.io/docker/cloud/build/shlinkio/shlink.svg?style=flat-square)](https://hub.docker.com/r/shlinkio/shlink/)
 [![Docker pulls](https://img.shields.io/docker/pulls/shlinkio/shlink.svg?style=flat-square)](https://hub.docker.com/r/shlinkio/shlink/)
 [![Latest Stable Version](https://img.shields.io/github/tag/shlinkio/shlink-docker-image.svg?style=flat-square)](https://github.com/shlinkio/shlink-docker-image/releases/latest)
 [![License](https://img.shields.io/github/license/shlinkio/shlink-docker-image.svg?style=flat-square)](https://github.com/shlinkio/shlink-docker-image/blob/master/LICENSE)
