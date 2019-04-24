@@ -1,10 +1,11 @@
 FROM php:7.3.2-cli-alpine3.9
 LABEL maintainer="Alejandro Celaya <alejandro@alejandrocelaya.com>"
 
-ARG SHLINK_VERSION=1.16.1
+ARG SHLINK_VERSION=1.16.3
 ENV SHLINK_VERSION ${SHLINK_VERSION}
 ENV APCu_VERSION 5.1.16
 ENV APCuBC_VERSION 1.0.4
+ENV SWOOLE_VERSION 4.3.3
 
 WORKDIR /etc/shlink
 
@@ -51,7 +52,7 @@ RUN rm /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
 # Install swoole
 # First line fixes an error when installing pecl extensions. Found in https://github.com/docker-library/php/issues/233
 RUN apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS && \
-    pecl install swoole && \
+    pecl install swoole-${SWOOLE_VERSION} && \
     docker-php-ext-enable swoole && \
     apk del .phpize-deps
 
