@@ -96,6 +96,7 @@ This is the complete list of supported env vars:
 
 * `SHORT_DOMAIN_HOST`: The custom short domain used for this shlink instance. For example **doma.in**.
 * `SHORT_DOMAIN_SCHEMA`: Either **http** or **https**.
+* `SHORTCODE_CHARS`: A charset to use when building short codes. Only needed when using more than one shlink instance ([Multi instance considerations](#multi-instance-considerations)).
 * `DB_DRIVER`: Either **sqlite** or **mysql**.
 * `DB_NAME`: The database name to be used when the driver is mysql. Defaults to **shlink**.
 * `DB_USER`: The username credential to be used when the driver is mysql.
@@ -127,8 +128,6 @@ docker run \
     -e "NOT_FOUND_REDIRECT_TO=https://www.google.com" \
     shlinkio/shlink
 ```
-
-> There's also two more env vars supported, `SECRET_KEY` and `SHORTCODE_CHARS`, which are explained below, in the [Multi instance considerations](#multi-instance-considerations) section.
 
 ## Provide config via volumes
 
@@ -188,47 +187,28 @@ docker run --name shlink -p 8080:8080 -v ${PWD}/my/config/dir:/etc/shlink/config
 
 ## Multi instance considerations
 
-Running multiple instances of shlink is not fully supported yet. These are some considerations to take into account.
+These are some considerations to take into account when running multiple instances of shlink.
 
-* Shlink makes use of MaxMind's GeoLite2 in order to geolocate visits and the database file needs to be updated regularly.
+* The first time shlink is run, it generates a charset used to generate short codes, which is a shuffled base62 charset.
+
+    If you are using several shlink instances, you will probably want all of them to use the same charset.
+
+    You can get a shuffled base62 charset by going to [https://shlink.io/short-code-chars](https://shlink.io/short-code-chars), and then you just need to pass it to all shlink instances using the `SHORTCODE_CHARS` env var.
+
+    If you don't do this, each shlink instance will use a different charset. However this shouldn't be a problem in practice, since the chances to get a collision will be very low.
+
+* > Ignore this one when using shlink v1.17.0 or newer. This version downloads/updates the GeoLite2 database automatically when processing visits.
+
+    Shlink makes use of MaxMind's GeoLite2 in order to geolocate visits and the database file needs to be updated regularly.
 
     If every container holds its own db file, you will need to find the way to run the `visit:update-db` command on every one of them.
 
     However, you can share the file by using a volume to `/etc/shlink/data/GeoLite2-City.mmdb`. This way, you can use kubernetes jobs, or regular cronjobs which just run the command in one of the instances, and you will still get it updated for all of them.
 
-* Shlink will generate a couple keys the first time it is run, and save them in `/tmp/shlink.keys`.
-
-    One of these keys is the charset used to generate short codes, which is a shuffled base62 charset.
-
-    In order to make sure all shlink instances share these keys, follow these steps:
-
-    * Run a single shlink instance, so that the keys are generated.
-    * Stop the container, and before upscaling the service, do one of these things:
-        * Mount the file `/tmp/shlink.keys` in a volume.
-        * Provide the keys in a `config/params/keys.config.json` config file with this structure:
-
-            ```json
-            {
-                "url_shortener": {
-                    "shortcode_chars": "<your_charset>"
-                },
-
-                "app_options": {
-                    "secret_key": "<your_secret_key>"
-                }
-            }
-            ```
-
-        * Provide the keys using the `SHORTCODE_CHARS` and `SECRET_KEY` env vars.
-    * Some of these options require you to know the values of the keys. You can find them by reading the `/tmp/shlink.keys` file inside the container, which has the shortcode chars and then the secret key, separated by a comma.
-    * Now you can upscale the service.
-
-> At some point, more elegant ways to solve these issues will be provided.
-
 ## Versions
 
 Currently, the versions of this image match the shlink version it contains.
 
-For example, installing shlinkio/shlink:v1.15.0, you will get an image containing shlink v1.15.0.
+For example, installing `shlinkio/shlink:1.15.0`, you will get an image containing shlink v1.15.0.
 
 There are no official shlink images previous to v1.15.0.
