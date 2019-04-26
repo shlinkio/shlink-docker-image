@@ -121,7 +121,7 @@ docker run \
     -e DB_USER=root \
     -e DB_PASSWORD=123abc \
     -e DB_HOST=something.rds.amazonaws.com \
-    -e "DISABLE_TRACK_PARAM=no-track" \
+    -e DISABLE_TRACK_PARAM="no-track" \
     -e DELETE_SHORT_URL_THRESHOLD=30 \
     -e LOCALE=es \
     -e VALIDATE_URLS=false \
@@ -133,51 +133,31 @@ docker run \
 
 Rather than providing custom configuration via env vars, it is also possible ot provide config files in json format.
 
-Mounting a volume at `config/params` you will make shlink load all the files on it with the prefix `.config.json`.
+Mounting a volume at `config/params` you will make shlink load all the files on it with the `.config.json` suffix.
 
 The whole configuration should have this format, but it can be split into multiple files that will be merged:
 
 ```json
 {
-    "app_options": {
-        "disable_track_param": "my_param"
-    },
-
-    "delete_short_urls": {
-        "check_visits_threshold": true,
-        "visits_threshold": 30
-    },
-
-    "translator": {
-        "locale": "es"
-    },
-
-    "entity_manager": {
-        "connection": {
-            "driver": "pdo_mysql",
-            "dbname": "shlink",
-            "user": "root",
-            "password": "123abc",
-            "host": "something.rds.amazonaws.com",
-            "port": "3306"
-        }
-    },
-
-    "url_shortener": {
-        "domain": {
-            "schema": "https",
-            "hostname": "doma.in"
-        },
-        "validate_url": false,
-        "not_found_short_url": {
-            "enable_redirection": true,
-            "redirect_to": "https://my-landing-page.com"
-        }
+    "disable_track_param": "my_param",
+    "delete_short_url_threshold": 30,
+    "locale": "es",
+    "short_domain_schema": "https",
+    "short_domain_host": "doma.in",
+    "validate_url": false,
+    "not_found_redirect_to": "https://my-landing-page.com",
+    "db_config": {
+        "driver": "pdo_mysql",
+        "dbname": "shlink",
+        "user": "root",
+        "password": "123abc",
+        "host": "something.rds.amazonaws.com",
+        "port": "3306"
     }
 }
 ```
 
-> This is how shlink internally expects the config. It currently requires knowing some implementation details, but it will be simplified in future versions of shlink, while keeping it backwards compatible.
+> This is internally parsed to how shlink expects the config. If you are using a version previous to 1.17.0, this parser is not present and you need to provide a config structure like the one [documented previously](https://github.com/shlinkio/shlink-docker-image/tree/v1.16.3#provide-config-via-volumes).
 
 Once created just run shlink with the volume:
 
