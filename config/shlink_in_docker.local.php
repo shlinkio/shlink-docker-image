@@ -81,10 +81,10 @@ $helper = new class {
             ];
         }
 
-        $driverOptions = $driver === 'mysql' ? [
+        $driverOptions = $driver !== 'mysql' ? [] : [
             // PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
             1002 => 'SET NAMES utf8',
-        ] : [];
+        ];
         return [
             'driver' => self::DB_DRIVERS_MAP[$driver],
             'dbname' => env('DB_NAME', 'shlink'),
@@ -108,6 +108,8 @@ $helper = new class {
 };
 
 return [
+
+    'config_cache_enabled' => false,
 
     'app_options' => [
         'secret_key' => $helper->getSecretKey(),
