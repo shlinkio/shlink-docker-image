@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Shlinkio\Shlink;
 
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+
 use function explode;
 use function file_exists;
 use function file_get_contents;
@@ -137,6 +140,26 @@ return [
         'shortcode_chars' => $helper->getShortcodeChars(),
         'validate_url' => (bool) env('VALIDATE_URLS', true),
         'not_found_short_url' => $helper->getNotFoundConfig(),
+    ],
+
+    'logger' => [
+        'handlers' => [
+            'shlink_rotating_handler' => [
+                'level' => Logger::EMERGENCY, // This basically disables regular file logs
+            ],
+            'shlink_stdout_handler' => [
+                'class' => StreamHandler::class,
+                'level' => Logger::INFO,
+                'stream' => 'php://stdout',
+                'formatter' => 'dashed',
+            ],
+        ],
+
+        'loggers' => [
+            'Shlink' => [
+                'handlers' => ['shlink_stdout_handler'],
+            ],
+        ],
     ],
 
 ];
