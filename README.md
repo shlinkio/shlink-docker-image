@@ -88,6 +88,8 @@ You could even link to a local database running on a different container:
 docker run --name shlink -p 8080:8080 [...] -e DB_HOST=some_mysql_container --link some_mysql_container shlinkio/shlink
 ```
 
+> If you have considered using SQLite but sharing the database file with a volume, read [this issue](https://github.com/shlinkio/shlink-docker-image/issues/40) first.
+
 ## Supported env vars
 
 A few env vars have been already used in previous examples, but this image supports others that can be used to customize its behavior.
