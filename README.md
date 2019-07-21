@@ -99,12 +99,12 @@ This is the complete list of supported env vars:
 * `SHORT_DOMAIN_HOST`: The custom short domain used for this shlink instance. For example **doma.in**.
 * `SHORT_DOMAIN_SCHEMA`: Either **http** or **https**.
 * `SHORTCODE_CHARS`: A charset to use when building short codes. Only needed when using more than one shlink instance ([Multi instance considerations](#multi-instance-considerations)).
-* `DB_DRIVER`: Either **sqlite** or **mysql**.
-* `DB_NAME`: The database name to be used when the driver is mysql. Defaults to **shlink**.
-* `DB_USER`: The username credential to be used when the driver is mysql.
-* `DB_PASSWORD`: The password credential to be used when the driver is mysql.
-* `DB_HOST`: The host name of the database server  when the driver is mysql.
-* `DB_PORT`: The port in which the database service is running when the driver is mysql. Defaults to **3306**.
+* `DB_DRIVER`: **sqlite** (which is the default value), **mysql** or **postgres**.
+* `DB_NAME`: The database name to be used when using an external database driver. Defaults to **shlink**.
+* `DB_USER`: The username credential to be used when using an external database driver.
+* `DB_PASSWORD`: The password credential to be used when using an external database driver.
+* `DB_HOST`: The host name of the database server  when using an external database driver.
+* `DB_PORT`: The port in which the database service is running when using an external database driver. Defaults to **3306**.
 * `DISABLE_TRACK_PARAM`: The name of a query param that can be used to visit short URLs avoiding the visit to be tracked. This feature won't be available if not value is provided.
 * `DELETE_SHORT_URL_THRESHOLD`: The amount of visits on short URLs which will not allow them to be deleted. Defaults to `15`.
 * `LOCALE`: Defines the default language for error pages when a user accesses a short URL which does not exist. Supported values are **es** and **en**. Defaults to **en**.
