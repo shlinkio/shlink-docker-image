@@ -110,6 +110,13 @@ This is the complete list of supported env vars:
 * `LOCALE`: Defines the default language for error pages when a user accesses a short URL which does not exist. Supported values are **es** and **en**. Defaults to **en**.
 * `VALIDATE_URLS`: Boolean which tells if shlink should validate a status 20x (after following redirects) is returned when trying to shorten a URL. Defaults to `true`.
 * `NOT_FOUND_REDIRECT_TO`: If a URL is provided here, when a user tries to access an invalid short URL, he/she will be redirected to this value. If this env var is not provided, the user will see a generic `404 - not found` page.
+* `REDIS_SERVERS`: A comma-separated list of redis servers where Shlink locks are stored (locks are used to prevent some operations to be run more than once in parallel).
+
+    This is important when running more than one Shlink instance ([Multi instance considerations](#multi-instance-considerations)). If not provided, Shlink stores locks on every instance separately.
+
+    If more than one server is provided, Shlink will expect them to be configured as a [redis cluster](https://redis.io/topics/cluster-tutorial).
+
+    In the future, these redis servers could be used for other caching operations performed by shlink.
 
 An example using all env vars could look like this:
 
@@ -128,6 +135,7 @@ docker run \
     -e LOCALE=es \
     -e VALIDATE_URLS=false \
     -e "NOT_FOUND_REDIRECT_TO=https://www.google.com" \
+    -e "REDIS_SERVERS=tcp://172.20.0.1:6379,tcp://172.20.0.2:6379" \
     shlinkio/shlink
 ```
 
@@ -148,6 +156,10 @@ The whole configuration should have this format, but it can be split into multip
     "short_domain_host": "doma.in",
     "validate_url": false,
     "not_found_redirect_to": "https://my-landing-page.com",
+    "redis_servers": [
+        "tcp://172.20.0.1:6379",
+        "tcp://172.20.0.2:6379"
+    ],
     "db_config": {
         "driver": "pdo_mysql",
         "dbname": "shlink",
@@ -179,13 +191,11 @@ These are some considerations to take into account when running multiple instanc
 
     If you don't do this, each shlink instance will use a different charset. However this shouldn't be a problem in practice, since the chances to get a collision will be very low.
 
-* > Ignore this one when using shlink v1.17.0 or newer. This version downloads/updates the GeoLite2 database automatically when processing visits.
+* Some operations performed by Shlink should never be run more than once at the same time (like creating the database for the first time, or downloading the GeoLite2 database). For this reason, Shlink uses a locking system.
 
-    Shlink makes use of MaxMind's GeoLite2 in order to geolocate visits and the database file needs to be updated regularly.
+    However, these locks are locally scoped to each Shlink instance by default.
 
-    If every container holds its own db file, you will need to find the way to run the `visit:update-db` command on every one of them.
-
-    However, you can share the file by using a volume to `/etc/shlink/data/GeoLite2-City.mmdb`. This way, you can use kubernetes jobs, or regular cronjobs which just run the command in one of the instances, and you will still get it updated for all of them.
+    You can (and should) make the locks to be shared by all Shlink instances by using a redis server/cluster. Just define the `REDIS_SERVERS` env var with the list of servers.
 
 ## Versions
 
