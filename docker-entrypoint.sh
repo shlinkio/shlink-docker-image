@@ -4,12 +4,20 @@ set -e
 cd /etc/shlink
 rm -f data/cache/app_config.php
 
-# Ignore the error when creating the database, since it could already exist
 echo "Creating fresh database if needed..."
-php vendor/doctrine/orm/bin/doctrine.php orm:schema-tool:create -n -q >/dev/null 2>/dev/null || true
+if [ -f "./module/CLI/src/Command/Db/CreateDatabaseCommand.php" ]; then
+  php bin/cli db:create -n -q
+else
+  # Ignore the error when creating the database, since it could already exist
+  php vendor/doctrine/orm/bin/doctrine.php orm:schema-tool:create -n -q >/dev/null 2>/dev/null || true
+fi
 
 echo "Updating database..."
-php vendor/doctrine/migrations/bin/doctrine-migrations.php migrations:migrate -n -q
+if [ -f "./module/CLI/src/Command/Db/MigrateDatabaseCommand.php" ]; then
+  php bin/cli db:migrate -n -q
+else
+  php vendor/doctrine/migrations/bin/doctrine-migrations.php migrations:migrate -n -q
+fi
 
 echo "Generating proxies..."
 php vendor/doctrine/orm/bin/doctrine.php orm:generate-proxies -n -q

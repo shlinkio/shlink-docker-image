@@ -162,4 +162,14 @@ return [
         ],
     ],
 
+    'dependencies' => [
+        'aliases' => env('REDIS_SERVERS') === null ? [] : [
+            'lock_store' => 'redis_lock_store',
+        ],
+    ],
+
+    'redis' => [
+        'servers' => env('REDIS_SERVERS'),
+    ],
+
 ];
