@@ -127,9 +127,11 @@ docker run \
     -e SHORT_DOMAIN_HOST=doma.in \
     -e SHORT_DOMAIN_SCHEMA=https \
     -e DB_DRIVER=mysql \
+    -e DB_NAME=shlink \
     -e DB_USER=root \
     -e DB_PASSWORD=123abc \
     -e DB_HOST=something.rds.amazonaws.com \
+    -e DB_PORT=3306 \
     -e DISABLE_TRACK_PARAM="no-track" \
     -e DELETE_SHORT_URL_THRESHOLD=30 \
     -e LOCALE=es \
